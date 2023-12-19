@@ -1,0 +1,13 @@
+.AddItem {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2px;
+  justify-content: center;
+  align-content: center;
+
+  &__input {
+    min-width: 100px;
+    max-width: 400px;
+    width: 100%;
+  }
+}
