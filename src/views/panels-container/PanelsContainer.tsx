@@ -1,6 +1,6 @@
 import './PanelsContainer.scss';
 import { PanelList } from './panel-list/PanelList';
-import { PanelListModeEnum } from './panel-list/PanelListModeEnum';
+import { PanelListModeEnum } from './shared/model/PanelListModeEnum';
 
 export const PanelsContainer = () => {
   return (

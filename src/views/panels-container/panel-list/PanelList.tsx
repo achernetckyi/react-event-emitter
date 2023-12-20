@@ -1,8 +1,9 @@
 import './PanelList.scss';
-import { PanelListModeEnum } from './PanelListModeEnum';
+import { PanelListModeEnum } from '../shared/model/PanelListModeEnum';
 import { useState } from 'react';
 import { AddItem } from './add-item/AddItem';
 import { SimpleItem } from '../shared/model/SimpleItem';
+import { ItemsList } from './items-list/ItemsList';
 
 type Props = {
   mode: PanelListModeEnum;
@@ -15,10 +16,14 @@ export const PanelList: React.FC<Props> = ({ mode }) => {
     setItems([...items, item]);
   };
 
+  const moveItem = (item: SimpleItem): void => {
+    console.log('Move ' + JSON.stringify(item));
+  };
+
   return (
     <div className={`PanelList ${mode}`}>
       <AddItem onAddItem={onAddItem}></AddItem>
-      <div> {JSON.stringify(items)} </div>
+      <ItemsList items={items} mode={mode} onItemMove={moveItem}/>
     </div>
   );
 };

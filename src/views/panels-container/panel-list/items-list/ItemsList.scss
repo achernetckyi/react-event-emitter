@@ -1,0 +1,13 @@
+.ItemsList {
+  list-style-type: none;
+
+  li {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+}
+

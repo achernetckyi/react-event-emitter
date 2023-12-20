@@ -1,4 +1,4 @@
 export class SimpleItem {
-  constructor(public readonly value: string) {
+  constructor(public readonly id: string, public readonly value: string) {
   }
 }

@@ -13,7 +13,7 @@ export const AddItem: React.FC<Props> = ({ onAddItem }) => {
 
   const onAddItemClick = (): void => {
     if (value) {
-      onAddItem(new SimpleItem(value));
+      onAddItem(new SimpleItem(crypto.randomUUID(), value));
     }
   };
 
