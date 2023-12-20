@@ -4,7 +4,7 @@ import { PanelsContainer } from './views/panels-container/PanelsContainer';
 
 export const App = () => {
   return (
-    <div className="App">
+    <div className="App" data-testid="App">
       <PanelsContainer />
     </div>
   );

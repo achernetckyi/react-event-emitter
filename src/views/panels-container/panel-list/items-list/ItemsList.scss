@@ -1,13 +1,12 @@
 .ItemsList {
   list-style-type: none;
 
-  li {
+  &__item {
+    vertical-align: center;
     display: flex;
     flex-direction: row;
-    column-gap: 5px;
     justify-content: center;
-    align-items: center;
-    margin-bottom: 5px;
+    margin-top: 5px;
   }
 }
 

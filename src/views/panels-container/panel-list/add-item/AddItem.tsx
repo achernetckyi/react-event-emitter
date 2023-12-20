@@ -4,7 +4,7 @@ import { SimpleItem } from '../../shared/model/SimpleItem';
 import { useState } from 'react';
 
 type Props = {
-  onAddItem: (item: SimpleItem) => void;
+  onAddItem: (item: Readonly<SimpleItem>) => void;
 }
 
 export const AddItem: React.FC<Props> = ({ onAddItem }) => {

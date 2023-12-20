@@ -12,17 +12,17 @@ type Props = {
 export const ItemsList: React.FC<Props> = ({ items, mode, onItemMove }) => {
 
   const itemsList = items.map(item =>
-    <li key={item.id}>
+    <div className="ItemsList__item" key={item.id}>
       {mode === PanelListModeEnum.RIGHT && (<AppButton text="<<" onClick={() => {
         onItemMove(item);
       }} />)}
-      {item.value}
+      <span> {item.value} </span>
       {mode === PanelListModeEnum.LEFT && (<AppButton text=">>" onClick={() => {
         onItemMove(item);
       }} />)}
-    </li>
+    </div>
   );
   return (
-    <ul className="ItemsList"> {itemsList} </ul>
+    <div className="ItemsList"> {itemsList} </div>
   );
 };
