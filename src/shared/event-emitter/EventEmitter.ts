@@ -1,49 +1,50 @@
 import { EventEmitterCallback, IEventEmitter } from './IEventEmitter';
 
+/**
+ * EventEmitter is a class for emitting and listening to events.
+ *
+ * The listeners are called after calling “emit” function. The listener which was registered after the calling
+ * “emit” does not get the previously emitted values.
+ * The listener does not support a specific context (the function is always called in its default context).
+ * */
 export class EventEmitter<T> implements IEventEmitter<T> {
-
-  private constructor(private readonly emitter: EventEmitterInternal<T>) {
-  }
-
-  static create<V>(): EventEmitter<V> {
-    const emitter = new EventEmitter<V>(new EventEmitterInternal<V>());
-    Object.freeze(emitter);
-    return emitter;
-  }
-
-  on(eventName: string, callback: EventEmitterCallback<T>): void {
-    this.emitter.on(eventName, callback);
-  }
-
-  once(eventName: string, callback: EventEmitterCallback<T>): void {
-    this.emitter.once(eventName, callback);
-  }
-
-  emit(eventName: string, payload: T): void {
-    this.emitter.emit(eventName, payload);
-  }
-
-  dispose(eventName: string): void {
-    this.emitter.dispose(eventName);
-  }
-
-  disposeCallback(eventName: string, callback: EventEmitterCallback<T>): void {
-    this.emitter.disposeCallback(eventName, callback);
-  }
-}
-
-class EventEmitterInternal<T> implements IEventEmitter<T> {
 
   private readonly listeners = new Map<string, Listener<T>[]>();
 
+  /**
+   * Add a listener for a given event.
+   * The listener function can be registered only once with the same event name
+   *
+   * @param {(String|Symbol)} eventName The event name.
+   * @param {Function} callback The listener function.
+   * @returns {void}
+   * @public
+   */
   on(eventName: string, callback: EventEmitterCallback<T>): void {
     this.addCallback(eventName, callback, false);
   }
 
+  /**
+   * Add a one-time listener for a given event.
+   * The listener function can be registered only once with the same event name
+   *
+   * @param {(String|Symbol)} eventName The event name.
+   * @param {Function} callback The listener function.
+   * @returns {void}
+   * @public
+   */
   once(eventName: string, callback: EventEmitterCallback<T>): void {
     this.addCallback(eventName, callback, true);
   }
 
+  /**
+   * Calls each of the listeners registered for a given event.
+   *
+   * @param {(String|Symbol)} eventName The event name.
+   * @param {(any)} payload The event name.
+   * @returns {void}
+   * @public
+   */
   emit(eventName: string, payload: T): void {
     const eventListeners = this.listeners.get(eventName);
     if (eventListeners?.length) {
@@ -58,15 +59,33 @@ class EventEmitterInternal<T> implements IEventEmitter<T> {
     }
   }
 
+  /**
+   * Remove the listeners of a given event.
+   *
+   * @param {(String|Symbol)} eventName The event name.
+   * @returns {void}
+   * @public
+   */
   dispose(eventName: string): void {
     this.listeners.delete(eventName);
   }
 
+  /**
+   * Remove the listener of a given event.
+   *
+   * @param {(String|Symbol)} eventName The event name.
+   * @param {Function} callback Only remove the listener that match this function.
+   * @returns {void}
+   * @public
+   */
   disposeCallback(eventName: string, callback: EventEmitterCallback<T>): void {
     this.deleteCallback(eventName, callback);
   }
 
   private addCallback(eventName: string, callback: EventEmitterCallback<T>, once: boolean): void {
+    if (!eventName) {
+      throw new Error('eventName should be a valid not empty string');
+    }
     let listeners = this.listeners.get(eventName);
     if (listeners?.find(listener => listener.callback === callback)) {
       return;

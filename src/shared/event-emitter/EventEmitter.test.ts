@@ -7,7 +7,7 @@ describe('EventEmitter', () => {
   let callbackObj: { callback: EventEmitterCallback<string> };
 
   beforeEach(() => {
-    ee = EventEmitter.create<string>();
+    ee = new EventEmitter<string>();
     callbackObj = {
       callback: (item: string) => {
       }
@@ -19,8 +19,6 @@ describe('EventEmitter', () => {
   });
 
   it('should be created', () => {
-    const ee = EventEmitter.create<string>();
-
     expect(ee).toBeDefined();
   });
 
@@ -30,7 +28,7 @@ describe('EventEmitter', () => {
     ee.on('test', callbackObj.callback);
     ee.emit('test', 'aa');
 
-    expect(callbackMock).toBeCalledTimes(1);
+    expect(callbackMock).toHaveBeenCalledTimes(1);
   });
 
   it('should add callback only 1 time for the same eventName', () => {
@@ -40,7 +38,7 @@ describe('EventEmitter', () => {
     ee.on('test', callbackObj.callback);
     ee.emit('test', 'aa');
 
-    expect(callbackMock).toBeCalledTimes(1);
+    expect(callbackMock).toHaveBeenCalledTimes(1);
   });
 
   it('should add callback only once for each eventName', () => {
@@ -52,9 +50,34 @@ describe('EventEmitter', () => {
     ee.emit('test1', 'aa');
     ee.emit('test2', 'bb');
 
-    expect(callbackMock).toBeCalledTimes(2);
-    expect(callbackMock).toBeCalledWith('aa');
-    expect(callbackMock).toBeCalledWith('bb');
+    expect(callbackMock).toHaveBeenCalledTimes(2);
+    expect(callbackMock).toHaveBeenCalledWith('aa');
+    expect(callbackMock).toHaveBeenCalledWith('bb');
+  });
+
+  it('should not throw an error if emit on unknown event', () => {
+    const callbackMock = jest.spyOn(callbackObj, 'callback').mockClear();
+
+    ee.on('test1', callbackObj.callback);
+    ee.emit('test2', 'bb');
+
+    expect(callbackMock).toHaveBeenCalledTimes(0);
+  });
+
+  it('should throw an error on registering empty event', () => {
+    const t = () => {
+      ee.on('', callbackObj.callback);
+    };
+
+    expect(t).toThrow();
+  });
+
+  it('should throw an error on registering "once" empty event', () => {
+    const t = () => {
+      ee.once('', callbackObj.callback);
+    };
+
+    expect(t).toThrow();
   });
 
   it('should call a listener with the same value which was emitted', () => {
@@ -63,8 +86,8 @@ describe('EventEmitter', () => {
     ee.on('test', callbackObj.callback);
     ee.emit('test', 'aa');
 
-    expect(callbackMock).toBeCalledTimes(1);
-    expect(callbackMock).toBeCalledWith('aa');
+    expect(callbackMock).toHaveBeenCalledTimes(1);
+    expect(callbackMock).toHaveBeenCalledWith('aa');
   });
 
   it('should call a listener twice if event was emitted twice', () => {
@@ -74,9 +97,9 @@ describe('EventEmitter', () => {
     ee.emit('test', 'aa');
     ee.emit('test', 'bb');
 
-    expect(callbackMock).toBeCalledTimes(2);
-    expect(callbackMock).toBeCalledWith('aa');
-    expect(callbackMock).toBeCalledWith('bb');
+    expect(callbackMock).toHaveBeenCalledTimes(2);
+    expect(callbackMock).toHaveBeenCalledWith('aa');
+    expect(callbackMock).toHaveBeenCalledWith('bb');
   });
 
   it('should call all registered listeners for eventName with correct values', () => {
@@ -91,10 +114,10 @@ describe('EventEmitter', () => {
     ee.on('test', callbackObj2.callback);
     ee.emit('test', 'aa');
 
-    expect(callbackMock).toBeCalledTimes(1);
-    expect(callbackMock2).toBeCalledTimes(1);
-    expect(callbackMock).toBeCalledWith('aa');
-    expect(callbackMock2).toBeCalledWith('aa');
+    expect(callbackMock).toHaveBeenCalledTimes(1);
+    expect(callbackMock2).toHaveBeenCalledTimes(1);
+    expect(callbackMock).toHaveBeenCalledWith('aa');
+    expect(callbackMock2).toHaveBeenCalledWith('aa');
   });
 
   it('should not call registered listeners for a different eventName', () => {
@@ -110,9 +133,9 @@ describe('EventEmitter', () => {
 
     ee.emit('test1', 'aa');
 
-    expect(callbackMock).toBeCalledTimes(1);
-    expect(callbackMock2).toBeCalledTimes(0);
-    expect(callbackMock).toBeCalledWith('aa');
+    expect(callbackMock).toHaveBeenCalledTimes(1);
+    expect(callbackMock2).toHaveBeenCalledTimes(0);
+    expect(callbackMock).toHaveBeenCalledWith('aa');
   });
 
   it('should call a listener once for "once" registration even if event was emitted twice', () => {
@@ -122,11 +145,10 @@ describe('EventEmitter', () => {
     ee.emit('test', 'aa');
     ee.emit('test', 'bb');
 
-    expect(callbackMock).toBeCalledTimes(1);
-    expect(callbackMock).toBeCalledWith('aa');
-    expect(callbackMock).not.toBeCalledWith('bb');
+    expect(callbackMock).toHaveBeenCalledTimes(1);
+    expect(callbackMock).toHaveBeenCalledWith('aa');
+    expect(callbackMock).not.toHaveBeenCalledWith('bb');
   });
-
 
   describe('dispose', () => {
     it('should delete all listeners for the event name', () => {
@@ -142,8 +164,8 @@ describe('EventEmitter', () => {
       ee.dispose('test');
       ee.emit('test', 'aa');
 
-      expect(callbackMock).not.toBeCalled();
-      expect(callbackMock2).not.toBeCalled();
+      expect(callbackMock).not.toHaveBeenCalled();
+      expect(callbackMock2).not.toHaveBeenCalled();
     });
 
     it('should not delete listeners for other event names', () => {
@@ -155,7 +177,7 @@ describe('EventEmitter', () => {
       ee.emit('test1', 'aa');
       ee.emit('test2', 'aa');
 
-      expect(callbackMock).toBeCalledTimes(1);
+      expect(callbackMock).toHaveBeenCalledTimes(1);
     });
 
   });
@@ -174,8 +196,8 @@ describe('EventEmitter', () => {
       ee.disposeCallback('test', callbackObj.callback);
       ee.emit('test', 'aa');
 
-      expect(callbackMock).not.toBeCalled();
-      expect(callbackMock2).toBeCalledTimes(1);
+      expect(callbackMock).not.toHaveBeenCalled();
+      expect(callbackMock2).toHaveBeenCalledTimes(1);
     });
 
     it('should not delete specific listener for a different event name', () => {
@@ -187,10 +209,10 @@ describe('EventEmitter', () => {
       ee.emit('test1', 'aa');
       ee.emit('test2', 'bb');
 
-      expect(callbackMock).toBeCalledTimes(1);
-      expect(callbackMock).toBeCalledWith('bb');
+      expect(callbackMock).toHaveBeenCalledTimes(1);
+      expect(callbackMock).toHaveBeenCalledWith('bb');
     });
-  })
+  });
 
 });
 

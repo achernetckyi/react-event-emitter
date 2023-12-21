@@ -1,6 +1,6 @@
-import { EventEmitter } from '../../../../shared/event-emitter/EventEmitter';
 import { SimpleItem } from '../model/SimpleItem';
+import { EventEmitter } from '../../../../shared/event-emitter/EventEmitter';
 
-const SimpleItemEventEmitter = EventEmitter.create<Readonly<SimpleItem>>();
+const SimpleItemEventEmitter = new EventEmitter<Readonly<SimpleItem>>();
 
 export default SimpleItemEventEmitter;
