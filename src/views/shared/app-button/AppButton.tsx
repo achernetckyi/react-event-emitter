@@ -7,6 +7,6 @@ type Props = {
 
 export const AppButton: React.FC<Props> = ({ text, onClick }) => {
   return (
-    <button className="AppButton" onClick={onClick}> {text} </button>
+    <button data-testid="AppButton" className="AppButton" onClick={onClick}> {text} </button>
   );
 };

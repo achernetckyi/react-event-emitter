@@ -23,8 +23,8 @@ export const AddItem: React.FC<Props> = ({ onAddItem }) => {
   };
 
   return (
-    <div className="AddItem">
-      <input type="text" className="AddItem__input" value={value} onChange={onInputChange} />
+    <div className="AddItem" data-testid="AddItem">
+      <input data-testid="AddItem-Input" type="text" className="AddItem__input" value={value} onChange={onInputChange} />
       <AppButton text="+" onClick={onAddItemClick} />
     </div>
   );

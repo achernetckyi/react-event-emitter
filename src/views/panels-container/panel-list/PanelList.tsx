@@ -41,7 +41,7 @@ export const PanelList: React.FC<Props> = ({ mode }) => {
   }, []);
 
   return (
-    <div className={`PanelList ${mode}`}>
+    <div data-testid="PanelList" className={`PanelList ${mode}`}>
       <AddItem onAddItem={onAddItem}></AddItem>
       <ItemsList items={items} mode={mode} onItemMove={moveItemFromThisPanel} />
     </div>
