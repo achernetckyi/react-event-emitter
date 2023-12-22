@@ -4,8 +4,6 @@ The listeners are called after calling “emit” function. The listener which w
 “emit” does not get the previously emitted values. \
 The listener does not support a specific context (the function is always called with its default context).
 
-TODO: 1. Write tests for all components
-
 ## Available Scripts
 
 In the project directory, you can run:
